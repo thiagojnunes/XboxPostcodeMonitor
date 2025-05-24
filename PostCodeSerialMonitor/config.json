@@ -1,0 +1,13 @@
+{
+  "AppConfiguration": {
+    "FormatVersion": 1,
+    "CheckForAppUpdates": true,
+    "CheckForCodeUpdates": true,
+    "CheckForFwUpdates": true,
+    "AppUpdateUrl": "https://example.com/todo",
+    "CodesMetaBaseUrl": "https://errors.xboxresearch.com/",
+    "FwUpdateUrl": "https://example.com/todo",
+    "MetaStoragePath": "meta",
+    "MetaJsonUrl": "https://errors.xboxresearch.com/meta.json"
+  }
+}

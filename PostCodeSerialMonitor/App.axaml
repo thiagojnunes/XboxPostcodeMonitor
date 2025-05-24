@@ -1,0 +1,24 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PostCodeSerialMonitor.App"
+             xmlns:local="using:PostCodeSerialMonitor"
+             RequestedThemeVariant="Dark">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Resources>
+        <StreamGeometry x:Key="settings_regular">M24 13.616v-3.183l-2.869-1.02c-.198-.687-.472-1.342-.811-1.955l1.308-2.751-2.257-2.258-2.752 1.307c-.613-.339-1.269-.613-1.955-.811l-1.021-2.869h-3.183l-1.021 2.869c-.686.198-1.342.472-1.955.811l-2.751-1.308-2.258 2.257 1.307 2.752c-.339.613-.614 1.268-.811 1.955l-2.869 1.02v3.183l2.869 1.02c.197.687.472 1.342.811 1.955l-1.308 2.752 2.257 2.258 2.752-1.308c.613.339 1.269.613 1.955.811l1.021 2.869h3.183l1.021-2.869c.687-.198 1.342-.472 1.955-.811l2.751 1.308 2.258-2.257-1.308-2.752c.339-.613.613-1.268.811-1.955l2.869-1.02zm-12 2.384c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4z</StreamGeometry>
+    </Application.Resources>
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+        <FluentTheme />
+        <Style Selector="Window">
+            <Setter Property="TransparencyLevelHint" Value="AcrylicBlur" />
+            <Setter Property="BorderBrush" Value="White" />
+            <Setter Property="BorderThickness" Value="1" />
+        </Style>
+    </Application.Styles>
+</Application>
