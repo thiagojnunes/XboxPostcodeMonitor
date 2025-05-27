@@ -91,7 +91,7 @@ public class SerialLineDecoder
 
             decoded.SeverityLevel = postCodes.Any(x => x.IsError) ? CodeSeverity.Error : CodeSeverity.Info;
             decoded.Name = $"{flavor}_" + string.Join("_", orderedMatches.Select(x => x.Name));
-            decoded.Description = string.Join("\n", orderedMatches.Select(x => x.Description));
+            decoded.Description = string.Join("", orderedMatches.Select(x => x.Description));
             return decoded;
         }
 
