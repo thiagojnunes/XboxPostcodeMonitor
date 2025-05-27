@@ -13,23 +13,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        runtime: [linux-x64, win-x64, osx-x64, osx-arm64]
         configuration: [Debug, Release]
         include:
-          - os: ubuntu-latest
-            artifact_name: linux-x64
-            runtime: linux-x64
-          - os: windows-latest
-            artifact_name: win-x64
-            runtime: win-x64
-          - os: macos-latest
-            artifact_name: osx-x64
-            runtime: osx-x64
-            matrix: osx-x64
-          - os: macos-latest
-            artifact_name: osx-arm64
-            runtime: osx-arm64
-            matrix: osx-arm64
+          - runtime: linux-x64
+            os: ubuntu-latest
+          - runtime: win-x64
+            os: windows-latest
+          - runtime: osx-x64
+            os: macos-latest
+          - runtime: osx-arm64
+            os: macos-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -76,22 +70,22 @@ jobs:
 
       - name: Create artifact directory
         shell: bash
-        run: mkdir -p artifacts/${{ matrix.artifact_name }}/${{ matrix.configuration }}
+        run: mkdir -p artifacts/${{ matrix.runtime }}/${{ matrix.configuration }}
 
       - name: Copy artifacts
         shell: bash
         run: |
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            cp -r PostCodeSerialMonitor/bin/${{ matrix.configuration }}/net9.0/${{ matrix.runtime }}/publish/* artifacts/${{ matrix.artifact_name }}/${{ matrix.configuration }}/
+            cp -r PostCodeSerialMonitor/bin/${{ matrix.configuration }}/net9.0/${{ matrix.runtime }}/publish/* artifacts/${{ matrix.runtime }}/${{ matrix.configuration }}/
           else
-            cp -r PostCodeSerialMonitor/bin/${{ matrix.configuration }}/net9.0/${{ matrix.runtime }}/publish/* artifacts/${{ matrix.artifact_name }}/${{ matrix.configuration }}/
+            cp -r PostCodeSerialMonitor/bin/${{ matrix.configuration }}/net9.0/${{ matrix.runtime }}/publish/* artifacts/${{ matrix.runtime }}/${{ matrix.configuration }}/
           fi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ matrix.artifact_name }}-${{ matrix.configuration }}
-          path: artifacts/${{ matrix.artifact_name }}/${{ matrix.configuration }}
+          name: ${{ matrix.runtime }}-${{ matrix.configuration }}
+          path: artifacts/${{ matrix.runtime }}/${{ matrix.configuration }}
           retention-days: 5
 
   release:
