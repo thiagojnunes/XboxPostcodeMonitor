@@ -219,7 +219,7 @@ public partial class MainWindowViewModel : ViewModelBase
         sb.AppendLine("=== Raw Log ===");
         foreach (var entry in RawLogEntries)
         {
-            sb.AppendLine(entry.RawText);
+            sb.Append(entry.RawText);
         }
         sb.AppendLine();
 
