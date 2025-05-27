@@ -262,6 +262,8 @@ public partial class MainWindowViewModel : ViewModelBase
             try
             {
                 await _serialService.ConnectAsync(SelectedPort);
+                RawLogEntries?.Clear();
+                LogEntries?.Clear();
                 IsConnected = true;
             }
             catch (Exception ex)
@@ -303,7 +305,6 @@ public partial class MainWindowViewModel : ViewModelBase
         PortraitMode = false;
         PrintTimestamps = false;
         I2cScanOutput = "Press button to scan";
-        LogEntries?.Clear();
     }
 
     private void OnDeviceStateChanged()
