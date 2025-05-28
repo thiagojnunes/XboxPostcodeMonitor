@@ -73,6 +73,7 @@ public class SerialService : IDisposable
 
         // Get version info
         _serialPort.WriteLine("version");
+        Thread.Sleep(100);
         success = await ParseVersionInfo();
         if (!success)
         {
@@ -82,6 +83,7 @@ public class SerialService : IDisposable
 
         // Get config state
         _serialPort.WriteLine("config");
+        Thread.Sleep(100);
         success = await ParseConfigState();
         if (!success)
         {
@@ -111,7 +113,11 @@ public class SerialService : IDisposable
             {
                 output += _serialPort!.ReadChar();
             }
-
+            _logger.LogTrace(
+                "ReadUntilEnd:\n###START###\n{output}\n###END### Len: {outputLength} bytes\n",
+                output,
+                output.Length
+            );
             return output;
         });
     }
