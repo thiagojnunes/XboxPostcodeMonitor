@@ -40,4 +40,5 @@ dotnet run
 
 ## ToDO
 
-- I2C Scanning
+- I2C Scanning (only if we can get it stable!)
+- Auto updater of the application
