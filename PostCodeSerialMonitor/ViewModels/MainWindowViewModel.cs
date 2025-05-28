@@ -37,7 +37,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public ObservableCollection<ConsoleType> ConsoleModels { get; } = new();
 
     public ObservableCollection<LogEntry> LogEntries { get; } = new();
-    public ObservableCollection<LogEntry> RawLogEntries { get; } = new();
+    public ObservableCollection<string> RawLogEntries { get; } = new();
 
     private string lastConnectedPicoFwVersion = "Unavailable";
 
@@ -219,7 +219,7 @@ public partial class MainWindowViewModel : ViewModelBase
         sb.AppendLine("=== Raw Log ===");
         foreach (var entry in RawLogEntries)
         {
-            sb.Append(entry.RawText);
+            sb.AppendLine(entry);
         }
         sb.AppendLine();
 
@@ -286,10 +286,9 @@ public partial class MainWindowViewModel : ViewModelBase
 
     private void OnDataReceived(string line)
     {
-        var outputLine = $"{line}\n";
-        RawLogEntries.Add(new LogEntry { RawText = outputLine });
+        RawLogEntries.Add(line);
 
-        var decoded = _serialLineDecoder.DecodeLine(outputLine, SelectedConsoleModel);
+        var decoded = _serialLineDecoder.DecodeLine(line, SelectedConsoleModel);
         if (decoded != null)
         {
             LogEntries.Add(new LogEntry { DecodedCode = decoded });

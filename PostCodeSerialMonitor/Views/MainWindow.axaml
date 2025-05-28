@@ -16,6 +16,7 @@
         <converters:BooleanNegationConverter x:Key="BooleanNegationConverter" />
         <converters:BooleanToTextConverter x:Key="BooleanToTextConverter" />
         <converters:SeverityToColorConverter x:Key="SeverityToColorConverter" />
+        <converters:NullFontSizeConverter x:Key="NullFontSizeConverter"/>
     </Window.Resources>
 
     <Design.DataContext>
@@ -101,18 +102,32 @@
                     <ItemsRepeater x:Name="LogItemsRepeater" ItemsSource="{Binding LogEntries}">
                         <ItemsRepeater.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding FormattedText}" 
+                                <StackPanel>
+                                <SelectableTextBlock Text="{Binding CodeText}" 
                                          FontFamily="Consolas"
-                                         FontSize="14"
+                                         FontSize="16"
                                          Padding="0"
                                          VerticalAlignment="Top"
                                          TextWrapping="Wrap">
-                                    <TextBlock.Styles>
-                                        <Style Selector="TextBlock">
+                                    <SelectableTextBlock.Styles>
+                                        <Style Selector="SelectableTextBlock">
                                             <Setter Property="Foreground" Value="{Binding SeverityLevel, Converter={StaticResource SeverityToColorConverter}}"/>
                                         </Style>
-                                    </TextBlock.Styles>
-                                </TextBlock>
+                                    </SelectableTextBlock.Styles>
+                                </SelectableTextBlock>
+                                <SelectableTextBlock Text="{Binding Description}" 
+                                         FontFamily="Consolas"
+                                         Padding="0"
+                                         VerticalAlignment="Top"
+                                         TextWrapping="Wrap">
+                                    <SelectableTextBlock.Styles>
+                                        <Style Selector="SelectableTextBlock">
+                                            <Setter Property="Foreground" Value="{Binding SeverityLevel, Converter={StaticResource SeverityToColorConverter}}"/>
+                                            <Setter Property="FontSize" Value="{Binding Description, Converter={StaticResource NullFontSizeConverter}, ConverterParameter=14}"/>
+                                        </Style>
+                                    </SelectableTextBlock.Styles>
+                                </SelectableTextBlock>
+                                </StackPanel>
                             </DataTemplate>
                         </ItemsRepeater.ItemTemplate>
                     </ItemsRepeater>

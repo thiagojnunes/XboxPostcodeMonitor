@@ -6,28 +6,31 @@ public class LogEntry
 {
     public string RawText { get; set; } = string.Empty;
     public DateTime Timestamp { get; set; } = DateTime.Now;
-    public DecodedCode? DecodedCode { get; set; }
-    public string FormattedText => DecodedCode != null ? FormatDecodedText() : RawText;
+    public required DecodedCode DecodedCode { get; set; }
+    // CodeText + Description
+    public string FormattedText => FormatText();
+    // Flavor, index and code (hex)
+    public string CodeText => FormatCodeText();
+    // Description or null
+    public string? Description => string.IsNullOrEmpty(DecodedCode.Description) ? null : DecodedCode?.Description;
     public bool IsWarning => SeverityLevel == CodeSeverity.Warning;
     public bool IsError => SeverityLevel == CodeSeverity.Error;
-    public CodeSeverity SeverityLevel => DecodedCode?.SeverityLevel ?? CodeSeverity.Info;
+    public CodeSeverity SeverityLevel => DecodedCode.SeverityLevel;
 
-    private string FormatDecodedText()
+    private string FormatCodeText()
     {
-        var details = new System.Text.StringBuilder();
-
-        if (!string.IsNullOrEmpty(DecodedCode?.Name))
-        {
-            details.Append($"- {DecodedCode.Name}");
-        }
-
-        if (!string.IsNullOrEmpty(DecodedCode?.Description))
-        {
-            details.Append($"\n\t- {DecodedCode.Description}");
-        }
-
         // Format flavor, index, and code with fixed spacing
-        var formattedPrefix = $"{DecodedCode?.Flavor,-4} ({DecodedCode?.Index}): {DecodedCode?.Code,4:X4}";
-        return $"{formattedPrefix}\t{details}";
+        var formatted = $"{DecodedCode?.Flavor,-4} ({DecodedCode?.Index}): {DecodedCode?.Code,4:X4}";
+        if (!string.IsNullOrEmpty(DecodedCode?.Name))
+            formatted += $" [{DecodedCode?.Name}]";
+        return formatted;
+    }
+
+    private string FormatText()
+    {
+        var formatted = $"{CodeText}";
+        if (!string.IsNullOrEmpty(Description))
+            formatted += $"\n- {Description}";
+        return formatted;
     }
 }
