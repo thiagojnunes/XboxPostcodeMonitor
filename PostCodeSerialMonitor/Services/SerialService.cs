@@ -36,10 +36,10 @@ public class SerialService : IDisposable
 
     public bool IsOpen => _serialPort?.IsOpen ?? false;
 
-    public async Task GoToREPL()
+    public async Task<bool> GoToREPL()
     {
         if (!IsOpen)
-            return;
+            return false;
 
         // Reset sequence
         for (int attempt = 0; attempt < 2; attempt++)
@@ -47,30 +47,12 @@ public class SerialService : IDisposable
             _serialPort?.WriteLine("\x03"); // CTRL+C
             _serialPort?.WriteLine(""); // ENTER
 
-            await ReadUntilPrompt();
+            var buf = await ReadUntilEnd();
+            if (buf.EndsWith(">> "))
+                return true;
         }
-    }
 
-    public async Task ChangeConfigAndContinue(string command)
-    {
-        if (!IsOpen)
-            return;
-
-        _readCts?.Cancel();
-
-        await GoToREPL();
-        _serialPort?.WriteLine(command);
-
-        // Update config state
-        _serialPort?.WriteLine("config");
-        await ParseConfigState();
-
-        _serialPort?.WriteLine("post");
-
-        _readCts = new CancellationTokenSource();
-
-        // Resume reading loop
-        _ = Task.Run(() => ReadLoop(_readCts.Token));
+        return false;
     }
 
     public async Task ConnectAsync(string portName, int baudRate = 115200)
@@ -82,22 +64,34 @@ public class SerialService : IDisposable
         _serialPort.Open();
         _readCts = new CancellationTokenSource();
 
-        await GoToREPL();
+        var success = await GoToREPL();
+        if (!success)
+        {
+            Disconnect();
+            throw new Exception("Failed to enter REPL. Maybe you are using the wrong serial device?");
+        }
 
         // Get version info
         _serialPort.WriteLine("version");
-        _serialPort.WriteLine("");
-        await ParseVersionInfo();
+        success = await ParseVersionInfo();
+        if (!success)
+        {
+            Disconnect();
+            throw new Exception("Failed to parse version information. Are you on FW v0.2.3 or greater?");
+        }
 
         // Get config state
         _serialPort.WriteLine("config");
-        _serialPort.WriteLine("");
-        await ParseConfigState();
+        success = await ParseConfigState();
+        if (!success)
+        {
+            Disconnect();
+            throw new Exception("Failed to parse config information.");
+        }
 
         if (PrintColors)
         {
             _serialPort.WriteLine("colors");
-            _serialPort.WriteLine("");
         }
 
         // Start post command
@@ -107,7 +101,7 @@ public class SerialService : IDisposable
         _ = Task.Run(() => ReadLoop(_readCts.Token));
     }
 
-    private async Task<string> ReadUntilPrompt()
+    private async Task<string> ReadUntilEnd()
     {
         return await Task.Run(() =>
         {
@@ -118,21 +112,17 @@ public class SerialService : IDisposable
                 output += _serialPort!.ReadChar();
             }
 
-            if (!output.EndsWith(">> "))
-            {
-                _logger.LogWarning("Got no prompt in the end, Content: {content}", output);
-            }
             return output;
         });
     }
 
-    private async Task ParseVersionInfo()
+    private async Task<bool> ParseVersionInfo()
     {
-        var res = await ReadUntilPrompt();
+        var res = await ReadUntilEnd();
         if (!res.Contains("FW: "))
         {
-            Console.WriteLine("Failed to get version reply!");
-            return;
+            _logger.LogError("Failed to get version reply!");
+            return false;
         }
 
         foreach (var line in res.Split("\r\n"))
@@ -148,15 +138,16 @@ public class SerialService : IDisposable
                 }
             }
         }
+        return true;
     }
 
-    private async Task ParseConfigState()
+    private async Task<bool> ParseConfigState()
     {
-        var res = await ReadUntilPrompt();
+        var res = await ReadUntilEnd();
         if (!res.Contains("Display mirrored:"))
         {
-            Console.WriteLine("Failed to get config state!");
-            return;
+            _logger.LogError("Failed to get config state!");
+            return false;
         }
 
         foreach (var line in res.Split("\r\n"))
@@ -172,6 +163,7 @@ public class SerialService : IDisposable
         }
 
         DeviceConfigChanged?.Invoke();
+        return true;
     }
 
     public void Disconnect()
