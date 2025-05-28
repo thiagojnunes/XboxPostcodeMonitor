@@ -6,7 +6,7 @@ public enum ConsoleType
 {
     UNKNOWN,
     ALL,
-    XboxOne,
+    XboxOnePhat,
     XboxOneS,
     XboxOneX,
     XboxSeriesS,

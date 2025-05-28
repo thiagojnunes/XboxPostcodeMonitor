@@ -76,7 +76,7 @@ public class ConsoleTypeConverter : DefaultTypeConverter
         return text.Trim() switch
         {
             "ALL" => ConsoleType.ALL,
-            "XOP" => ConsoleType.XboxOne,
+            "XOP" => ConsoleType.XboxOnePhat,
             "XOS" => ConsoleType.XboxOneS,
             "XOX" => ConsoleType.XboxOneX,
             "XSS" => ConsoleType.XboxSeriesS,
@@ -90,7 +90,7 @@ public class ConsoleTypeConverter : DefaultTypeConverter
         return type switch
         {
             ConsoleType.ALL => "ALL",
-            ConsoleType.XboxOne => "XOP",
+            ConsoleType.XboxOnePhat => "XOP",
             ConsoleType.XboxOneS => "XOS",
             ConsoleType.XboxOneX => "XOX",
             ConsoleType.XboxSeriesS => "XSS",
