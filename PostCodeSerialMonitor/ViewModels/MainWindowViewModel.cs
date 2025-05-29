@@ -99,7 +99,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Get version from assembly
         var version = Assembly.GetExecutingAssembly().GetName().Version;
-        AppVersion = version?.ToString() ?? "1.0.0";
+        AppVersion = version?.ToString() ?? "Unversioned";
 
         // Initialize console models with only Xbox consoles
         foreach (ConsoleType type in Enum.GetValues(typeof(ConsoleType)))
