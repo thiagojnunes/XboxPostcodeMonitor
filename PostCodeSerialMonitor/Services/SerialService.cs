@@ -58,7 +58,7 @@ public class SerialService : IDisposable
     public async Task ConnectAsync(string portName, int baudRate = 115200)
     {
         if (_serialPort != null && _serialPort.IsOpen)
-            throw new InvalidOperationException("Serial port already open");
+            _serialPort.Close();
 
         _serialPort = new SerialPortWrapper(portName, baudRate);
         _serialPort.Open();
@@ -177,8 +177,8 @@ public class SerialService : IDisposable
         if (_serialPort != null)
         {
             _readCts?.Cancel();
-            _serialPort.Close();
-            _serialPort.Dispose();
+            _serialPort?.Close();
+            _serialPort?.Dispose();
             _serialPort = null;
             Disconnected?.Invoke();
         }
@@ -192,10 +192,16 @@ public class SerialService : IDisposable
     {
         try
         {
+            var line = "";
             while (!token.IsCancellationRequested && _serialPort != null && _serialPort.IsOpen)
             {
-                var line = _serialPort.ReadLine();
-                DataReceived?.Invoke(line);
+                line += _serialPort.ReadChar();
+
+                if (line.EndsWith("\r\n"))
+                {
+                    DataReceived?.Invoke(line);
+                    line = "";
+                }
             }
         }
         catch (Exception)

@@ -304,6 +304,11 @@ public partial class MainWindowViewModel : ViewModelBase
         PortraitMode = false;
         PrintTimestamps = false;
         I2cScanOutput = "Press button to scan";
+        var prevSelectedPort = SelectedPort;
+        RefreshPorts();
+        if (prevSelectedPort != null && SerialPorts.Contains(prevSelectedPort)) {
+            SelectedPort = prevSelectedPort;
+        }
     }
 
     private void OnDeviceStateChanged()
