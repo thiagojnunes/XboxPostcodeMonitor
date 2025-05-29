@@ -12,7 +12,6 @@ using Avalonia.Platform.Storage;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ReactiveUI;
 
 using PostCodeSerialMonitor.Views;
 using PostCodeSerialMonitor.Services;
