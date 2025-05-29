@@ -1,8 +1,14 @@
+[![Build and Release](https://github.com/xboxoneresearch/XboxPostcodeMonitor/actions/workflows/build.yml/badge.svg)](https://github.com/xboxoneresearch/XboxPostcodeMonitor/actions/workflows/build.yml)
+![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/xboxoneresearch/XboxPostcodeMonitor/latest/total)
+[![GitHub latest Tag](https://img.shields.io/github/v/tag/xboxoneresearch/XboxPostcodeMonitor)](https://github.com/xboxoneresearch/XboxPostcodeMonitor/releases/latest)
+
 # Xbox PostCode Serial Monitor
 
 A cross-platform (Linux, Windows, macOS) desktop GUI serial monitor built with Avalonia .NET.
 
 To be used with [PicoDurangoPOST](https://github.com/xboxoneresearch/PicoDurangoPOST).
+
+Error codes are synced from [errors.xboxresearch.com](https://errors.xboxresearch.com)
 
 > [!IMPORTANT]
 > You have to use at least fw v0.2.3 of `PicoDurangoPOST`
@@ -41,4 +47,5 @@ dotnet run
 ## ToDO
 
 - I2C Scanning (only if we can get it stable!)
-- Auto updater of the application
+- Notify user about new available app version
+- Notify user about new available Pico firmware
