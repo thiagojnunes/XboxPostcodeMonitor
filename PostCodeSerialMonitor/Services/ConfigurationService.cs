@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using PostCodeSerialMonitor.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace PostCodeSerialMonitor.Services;
 public class ConfigurationService
@@ -30,7 +31,10 @@ public class ConfigurationService
     {
         try
         {
-            var json = JsonSerializer.Serialize(_configurationMonitor.CurrentValue, new JsonSerializerOptions
+            var newConfig = new Dictionary<string, AppConfiguration>(){
+                { nameof(AppConfiguration), _configurationMonitor.CurrentValue }
+            };
+            var json = JsonSerializer.Serialize(newConfig, new JsonSerializerOptions
             {
                 WriteIndented = true
             });
