@@ -6,6 +6,8 @@ using Avalonia.Markup.Xaml;
 using PostCodeSerialMonitor.ViewModels;
 using PostCodeSerialMonitor.Views;
 using Microsoft.Extensions.DependencyInjection;
+using PostCodeSerialMonitor.Services;
+using System.Globalization;
 
 namespace PostCodeSerialMonitor;
 
@@ -29,11 +31,11 @@ public partial class App : Application
         // Creates a ServiceProvider containing services from the provided IServiceCollection
         var services = collection.BuildServiceProvider();
 
+        var configService = services.GetRequiredService<ConfigurationService>();
         var mainWindowViewModel = services.GetRequiredService<MainWindowViewModel>();
 
-        //@todo Load language setting in cofig.json.
-        //
-        //Assets.Resources.Culture = new CultureInfo("en-US");
+        // Load language setting in config.json.
+        Assets.Resources.Culture = new CultureInfo(configService.Config.Language);
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
