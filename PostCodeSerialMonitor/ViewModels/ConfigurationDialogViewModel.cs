@@ -9,6 +9,8 @@ using Avalonia.Controls;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace PostCodeSerialMonitor.ViewModels;
 
@@ -71,6 +73,8 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
     [RelayCommand]
     private async Task SaveAsync(Window window)
     {
+        bool languageChanged = _originalConfiguration.Language != SelectedLanguage;
+
         await _configurationService.UpdateConfigurationAsync(config =>
         {
             config.CheckForAppUpdates = CheckForAppUpdates;
@@ -83,6 +87,13 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
         });
 
         window.Close();
+
+        if (languageChanged) {
+            await MessageBoxManager
+                .GetMessageBoxStandard(Assets.Resources.RestartRequired, string.Format(Assets.Resources.LanguageChangedPleaseRestart),
+                    ButtonEnum.Ok)
+                .ShowAsync();
+        }
     }
 
     [RelayCommand]

@@ -369,4 +369,12 @@
     <value>Falha ao abrir URL: {0}</value>
     <comment>In Views/MainWindow.axaml.cs</comment>
   </data>
+  <data name="RestartRequired" xml:space="preserve">
+    <value>Reiniciar necessário</value>
+    <comment>In ViewModels/ConfigurationDialogViewModel.cs</comment>
+  </data>
+  <data name="LanguageChangedPleaseRestart" xml:space="preserve">
+    <value>O idioma foi alterado. Reinicie o aplicativo para que a alteração entre em vigor.</value>
+    <comment>In ViewModels/ConfigurationDialogViewModel.cs</comment>
+  </data>
 </root>
