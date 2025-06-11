@@ -3,9 +3,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PostCodeSerialMonitor.Models;
 using PostCodeSerialMonitor.Services;
+using PostCodeSerialMonitor.Utils;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using System;
+using System.Collections.Generic;
+using System.Globalization;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 
 namespace PostCodeSerialMonitor.ViewModels;
 
@@ -32,10 +37,20 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
     [ObservableProperty]
     private string fwUpdateUrl;
 
-    public ObservableCollection<string> Languages { get; } = new();
+    [ObservableProperty]
+    private ObservableCollection<string> languages;
 
     [ObservableProperty]
     private string selectedLanguage;
+
+    public static ObservableCollection<string> GetAvailableLanguages()
+    {
+        var languages = new ObservableCollection<string>();
+        var cultures = LocalizationUtils.GetAvailableCultures();
+        foreach (CultureInfo culture in cultures)
+            languages.Add(culture.Name);
+        return languages;
+    }
 
     public ConfigurationDialogViewModel(ConfigurationService configurationService)
     {
@@ -52,13 +67,14 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
         SelectedLanguage = _originalConfiguration.Language;
 
         //Add available languages
-        Languages.Add("en-US");
-        Languages.Add("pt-BR");
+        Languages = GetAvailableLanguages();
     }
 
     [RelayCommand]
     private async Task SaveAsync(Window window)
     {
+        bool languageChanged = _originalConfiguration.Language != SelectedLanguage;
+
         await _configurationService.UpdateConfigurationAsync(config =>
         {
             config.CheckForAppUpdates = CheckForAppUpdates;
@@ -71,6 +87,13 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
         });
 
         window.Close();
+
+        if (languageChanged) {
+            await MessageBoxManager
+                .GetMessageBoxStandard(Assets.Resources.RestartRequired, string.Format(Assets.Resources.LanguageChangedPleaseRestart),
+                    ButtonEnum.Ok)
+                .ShowAsync();
+        }
     }
 
     [RelayCommand]

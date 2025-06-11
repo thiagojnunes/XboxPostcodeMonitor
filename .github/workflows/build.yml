@@ -98,6 +98,7 @@ jobs:
         shell: bash
         run: |
           cp -r PostCodeSerialMonitor/bin/${{ matrix.configuration }}/net9.0/${{ matrix.runtime }}/publish/* artifacts/${{ matrix.runtime }}/${{ matrix.configuration }}/
+          cp PostCodeSerialMonitor/config.json artifacts/${{ matrix.runtime }}/${{ matrix.configuration }}/
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4

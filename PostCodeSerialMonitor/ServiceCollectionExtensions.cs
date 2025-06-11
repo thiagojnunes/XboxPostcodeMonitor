@@ -28,13 +28,12 @@ public static class ServiceCollectionExtensions
 
         // Build configuration
         var configuration = new ConfigurationBuilder()
-            .AddJsonFile("config.json", optional: true, reloadOnChange: true)
+            .AddJsonFile("config.json", optional: false, reloadOnChange: true)
             .Build();
 
         // Configure options with validation
-        collection.Configure<AppConfiguration>(configuration.GetSection(nameof(AppConfiguration)));
         collection.AddOptions<AppConfiguration>()
-            .Bind(configuration.GetSection(nameof(AppConfiguration)))
+            .Bind(configuration.GetRequiredSection(nameof(AppConfiguration)))
             .Validate(x => {
                 return x.FormatVersion == SUPPORTED_CONFIG_FORMAT_VERSION;
             })

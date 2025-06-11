@@ -206,6 +206,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // Add metadata
         sb.AppendLine("=== Metadata ===");
+        
         sb.AppendLine($"Console Type: {SelectedConsoleModel}");
         sb.AppendLine($"Pico Firmware: {lastConnectedPicoFwVersion}");
         sb.AppendLine($"Metadata Update: {MetadataLastUpdate}");
