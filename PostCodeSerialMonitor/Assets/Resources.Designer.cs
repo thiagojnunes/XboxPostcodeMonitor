@@ -627,6 +627,28 @@ namespace PostCodeSerialMonitor.Assets {
             get {
                 return ResourceManager.GetString("FailedOpenUrl", resourceCulture);
             }
-        }        
+        }
+
+        /// <summary>
+        ///   In ViewModels/ConfigurationDialogViewModel.cs
+        /// </summary>
+        public static string RestartRequired
+        {
+            get
+            {
+                return ResourceManager.GetString("RestartRequired", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   In ViewModels/ConfigurationDialogViewModel.cs
+        /// </summary>
+        public static string LanguageChangedPleaseRestart
+        {
+            get
+            {
+                return ResourceManager.GetString("LanguageChangedPleaseRestart", resourceCulture);
+            }
+        }
     }
 }

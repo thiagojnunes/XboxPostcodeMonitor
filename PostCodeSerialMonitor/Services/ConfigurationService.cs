@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using PostCodeSerialMonitor.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PostCodeSerialMonitor.Services;
 public class ConfigurationService
@@ -30,12 +32,18 @@ public class ConfigurationService
     {
         try
         {
-            var json = JsonSerializer.Serialize(_configurationMonitor.CurrentValue, new JsonSerializerOptions
+            var startupPath = AppContext.BaseDirectory?.TrimEnd(Path.DirectorySeparatorChar)
+                ?? throw new InvalidOperationException();
+
+            var newConfig = new Dictionary<string, AppConfiguration>(){
+                { nameof(AppConfiguration), _configurationMonitor.CurrentValue }
+            };
+            var json = JsonSerializer.Serialize(newConfig, new JsonSerializerOptions
             {
                 WriteIndented = true
             });
 
-            await File.WriteAllTextAsync(_configFilePath, json);
+            await File.WriteAllTextAsync(Path.Join(startupPath, _configFilePath), json);
             _logger.LogInformation(Assets.Resources.ConfigurationSaved);
         }
         catch (Exception ex)
