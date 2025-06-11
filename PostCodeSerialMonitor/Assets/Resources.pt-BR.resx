@@ -370,7 +370,7 @@
     <comment>In Views/MainWindow.axaml.cs</comment>
   </data>
   <data name="RestartRequired" xml:space="preserve">
-    <value>Reiniciar necessário</value>
+    <value>Necessário reiniciar</value>
     <comment>In ViewModels/ConfigurationDialogViewModel.cs</comment>
   </data>
   <data name="LanguageChangedPleaseRestart" xml:space="preserve">
