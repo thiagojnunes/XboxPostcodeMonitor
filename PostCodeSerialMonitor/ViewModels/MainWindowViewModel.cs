@@ -177,7 +177,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         if (_configurationService.Config.CheckForAppUpdates)
         {
-            updateAvailable = await _metaUpdateService.CheckForAppUpdatesAsync($"v{AppVersion}");
+            updateAvailable = await _metaUpdateService.CheckForAppUpdatesAsync(AppVersion);
             if (updateAvailable)
             {
                 var box = MessageBoxManager

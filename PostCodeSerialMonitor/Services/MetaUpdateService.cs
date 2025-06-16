@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using PostCodeSerialMonitor.Models;
+using PostCodeSerialMonitor.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace PostCodeSerialMonitor.Services;
@@ -52,22 +53,28 @@ public class MetaUpdateService
         return true;
     }
 
-    public async Task<bool> CheckForAppUpdatesAsync(string currentVersion)
+    public async Task<bool> CheckForAppUpdatesAsync(string localVersion)
     {
         // Get the latest release from GitHub repo.
-        var remoteRelease = await GetRemoteAppReleaseAsync();
+        var remoteRelease = await GetRepositoryLatestReleaseAsync("xboxoneresearch", "XboxPostcodeMonitor");
         var remoteVersion = (remoteRelease == null) ? string.Empty : remoteRelease.tag_name;
 
-        return string.Compare($"{remoteVersion}", $"{currentVersion}") > 0;
+        SemanticVersionUtils local = new SemanticVersionUtils(localVersion);
+        SemanticVersionUtils remote = new SemanticVersionUtils(remoteVersion);
+
+        return remote > local;
     }
 
-    public async Task<bool> CheckForFirmwareUpdatesAsync(string currentVersion)
+    public async Task<bool> CheckForFirmwareUpdatesAsync(string localVersion)
     {
         // Get the latest release from GitHub repo.
-        var remoteRelease = await GetRemoteFirmwareReleaseAsync();
+        var remoteRelease = await GetRepositoryLatestReleaseAsync("xboxoneresearch", "PicoDurangoPOST");
         var remoteVersion = (remoteRelease == null) ? string.Empty : remoteRelease.tag_name;
 
-        return string.Compare($"{remoteVersion}", $"{currentVersion}") > 0;
+        SemanticVersionUtils local = new SemanticVersionUtils(localVersion);
+        SemanticVersionUtils remote = new SemanticVersionUtils(remoteVersion);
+
+        return remote > local;
     }
 
     public async Task<bool> CheckForMetaDefinitionUpdatesAsync()
@@ -178,28 +185,9 @@ public class MetaUpdateService
         }
     }
 
-    private async Task<ReleaseDefinition?> GetRemoteAppReleaseAsync()
+    private async Task<ReleaseDefinition?> GetRepositoryLatestReleaseAsync(string owner, string repo)
     {
-        var gitHubApiReleasesLatest = new Uri("https://api.github.com/repos/xboxoneresearch/XboxPostcodeMonitor/releases/latest");
-
-        try
-        {
-            var response = await _httpClient.GetAsync(gitHubApiReleasesLatest);
-            response.EnsureSuccessStatusCode();
-
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<ReleaseDefinition>(json, _jsonSerializeOptions);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, Assets.Resources.FailedDownloadReleaseDefinition, gitHubApiReleasesLatest);
-            return null;
-        }
-    }
-
-    private async Task<ReleaseDefinition?> GetRemoteFirmwareReleaseAsync()
-    {
-        var gitHubApiReleasesLatest = new Uri("https://api.github.com/repos/xboxoneresearch/PicoDurangoPOST/releases/latest");
+        var gitHubApiReleasesLatest = new Uri($"https://api.github.com/repos/{owner}/{repo}/releases/latest");
 
         try
         {
