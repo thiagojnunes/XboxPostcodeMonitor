@@ -37,10 +37,6 @@ public class MetaUpdateService
             ?? throw new ArgumentNullException(nameof(_configurationService.Config.MetaStoragePath));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _httpClient = new HttpClient();
-
-        //All GitHub's API requests must include a valid User-Agent header.
-        //@see https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api?apiVersion=2022-11-28#user-agent
-        _httpClient.DefaultRequestHeaders.Add("User-Agent", "XboxPostcodeMonitor");
     }
 
     public async Task<bool> TryLoadLocalDefinition()
@@ -51,30 +47,6 @@ public class MetaUpdateService
 
         _currentMeta = localMeta;
         return true;
-    }
-
-    public async Task<bool> CheckForAppUpdatesAsync(string localVersion)
-    {
-        // Get the latest release from GitHub repo.
-        var remoteRelease = await GetRepositoryLatestReleaseAsync("xboxoneresearch", "XboxPostcodeMonitor");
-        var remoteVersion = (remoteRelease == null) ? string.Empty : remoteRelease.tag_name;
-
-        SemanticVersionUtils local = new SemanticVersionUtils(localVersion);
-        SemanticVersionUtils remote = new SemanticVersionUtils(remoteVersion);
-
-        return remote > local;
-    }
-
-    public async Task<bool> CheckForFirmwareUpdatesAsync(string localVersion)
-    {
-        // Get the latest release from GitHub repo.
-        var remoteRelease = await GetRepositoryLatestReleaseAsync("xboxoneresearch", "PicoDurangoPOST");
-        var remoteVersion = (remoteRelease == null) ? string.Empty : remoteRelease.tag_name;
-
-        SemanticVersionUtils local = new SemanticVersionUtils(localVersion);
-        SemanticVersionUtils remote = new SemanticVersionUtils(remoteVersion);
-
-        return remote > local;
     }
 
     public async Task<bool> CheckForMetaDefinitionUpdatesAsync()
@@ -181,25 +153,6 @@ public class MetaUpdateService
         catch (Exception ex)
         {
             _logger.LogError(ex, Assets.Resources.FailedDownloadMetaDefinition, Config.MetaJsonUrl);
-            return null;
-        }
-    }
-
-    private async Task<ReleaseDefinition?> GetRepositoryLatestReleaseAsync(string owner, string repo)
-    {
-        var gitHubApiReleasesLatest = new Uri($"https://api.github.com/repos/{owner}/{repo}/releases/latest");
-
-        try
-        {
-            var response = await _httpClient.GetAsync(gitHubApiReleasesLatest);
-            response.EnsureSuccessStatusCode();
-
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<ReleaseDefinition>(json, _jsonSerializeOptions);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, Assets.Resources.FailedDownloadReleaseDefinition, gitHubApiReleasesLatest);
             return null;
         }
     }
