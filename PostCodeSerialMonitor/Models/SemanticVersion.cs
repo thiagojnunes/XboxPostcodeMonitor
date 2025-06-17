@@ -1,10 +1,10 @@
-namespace PostCodeSerialMonitor.Utils;
+namespace PostCodeSerialMonitor.Models;
 
-public class SemanticVersionUtils
+public class SemanticVersion
 {
   private string _version { get; set; } = string.Empty;
 
-  public SemanticVersionUtils(string version)
+  public SemanticVersion(string version)
   {
     //Ignore the 'v' at the beginning of the version string
     if (version.StartsWith("v"))
@@ -18,13 +18,13 @@ public class SemanticVersionUtils
   }
 
   /// Override greater-than operator for SemanticVersionUtils
-  public static bool operator >(SemanticVersionUtils left, SemanticVersionUtils right)
+  public static bool operator >(SemanticVersion left, SemanticVersion right)
   {
     return string.Compare(left._version, right._version) > 0;
   }
 
   /// Override less-than operator for SemanticVersionUtils
-  public static bool operator <(SemanticVersionUtils left, SemanticVersionUtils right)
+  public static bool operator <(SemanticVersion left, SemanticVersion right)
   {
     return string.Compare(left._version, right._version) < 0;
   }

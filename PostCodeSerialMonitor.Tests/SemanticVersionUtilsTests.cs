@@ -1,5 +1,5 @@
 using System.Collections;
-using PostCodeSerialMonitor.Utils;
+using PostCodeSerialMonitor.Models;
 
 namespace PostCodeSerialMonitor.Tests;
 public class SemanticVersionTestDataGenerator : IEnumerable<object[]>
@@ -25,8 +25,8 @@ public class SemanticVersionUtilsTests
     [ClassData(typeof(SemanticVersionTestDataGenerator))]
     public void TestComparison(string localVersion, string remoteVersion, bool isNewer)
     {
-        var local = new SemanticVersionUtils(localVersion);
-        var remote = new SemanticVersionUtils(remoteVersion);
+        var local = new SemanticVersion(localVersion);
+        var remote = new SemanticVersion(remoteVersion);
 
         Assert.Equal(isNewer, remote > local);
     }

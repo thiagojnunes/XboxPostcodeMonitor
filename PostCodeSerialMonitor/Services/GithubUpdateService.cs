@@ -1,12 +1,8 @@
 using System;
-using System.IO;
 using System.Net.Http;
-using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using PostCodeSerialMonitor.Models;
-using PostCodeSerialMonitor.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace PostCodeSerialMonitor.Services;
@@ -43,8 +39,8 @@ public class GithubUpdateService
         var remoteRelease = await GetRepositoryLatestReleaseAsync("xboxoneresearch", "XboxPostcodeMonitor");
         var remoteVersion = remoteRelease?.tag_name ?? string.Empty;
 
-        SemanticVersionUtils local = new SemanticVersionUtils(localVersion);
-        SemanticVersionUtils remote = new SemanticVersionUtils(remoteVersion);
+        SemanticVersion local = new SemanticVersion(localVersion);
+        SemanticVersion remote = new SemanticVersion(remoteVersion);
 
         return remote > local;
     }
@@ -55,8 +51,8 @@ public class GithubUpdateService
         var remoteRelease = await GetRepositoryLatestReleaseAsync("xboxoneresearch", "PicoDurangoPOST");
         var remoteVersion = remoteRelease?.tag_name ?? string.Empty;
 
-        SemanticVersionUtils local = new SemanticVersionUtils(localVersion);
-        SemanticVersionUtils remote = new SemanticVersionUtils(remoteVersion);
+        SemanticVersion local = new SemanticVersion(localVersion);
+        SemanticVersion remote = new SemanticVersion(remoteVersion);
 
         return remote > local;
     }
