@@ -58,6 +58,7 @@ public static class ServiceCollectionExtensions
         collection.AddSingleton<MetaUpdateService>();
         collection.AddSingleton<MetaDefinitionService>();
         collection.AddSingleton<SerialLineDecoder>();
+        collection.AddSingleton<GithubUpdateService>();
 
         // Register ViewModels
         collection.AddTransient<MainWindowViewModel>();

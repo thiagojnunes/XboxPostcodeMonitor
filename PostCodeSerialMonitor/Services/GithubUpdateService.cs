@@ -41,7 +41,7 @@ public class GithubUpdateService
     {
         // Get the latest release from GitHub repo.
         var remoteRelease = await GetRepositoryLatestReleaseAsync("xboxoneresearch", "XboxPostcodeMonitor");
-        var remoteVersion = (remoteRelease == null) ? string.Empty : remoteRelease.tag_name;
+        var remoteVersion = remoteRelease?.tag_name ?? string.Empty;
 
         SemanticVersionUtils local = new SemanticVersionUtils(localVersion);
         SemanticVersionUtils remote = new SemanticVersionUtils(remoteVersion);
@@ -53,7 +53,7 @@ public class GithubUpdateService
     {
         // Get the latest release from GitHub repo.
         var remoteRelease = await GetRepositoryLatestReleaseAsync("xboxoneresearch", "PicoDurangoPOST");
-        var remoteVersion = (remoteRelease == null) ? string.Empty : remoteRelease.tag_name;
+        var remoteVersion = remoteRelease?.tag_name ?? string.Empty;
 
         SemanticVersionUtils local = new SemanticVersionUtils(localVersion);
         SemanticVersionUtils remote = new SemanticVersionUtils(remoteVersion);

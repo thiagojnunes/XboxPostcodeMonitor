@@ -1,6 +1,3 @@
-using System.Collections.Generic;
-using Avalonia.X11.Interop;
-
 namespace PostCodeSerialMonitor.Utils;
 
 public class SemanticVersionUtils
