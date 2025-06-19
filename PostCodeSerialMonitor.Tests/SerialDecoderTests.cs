@@ -6,6 +6,7 @@ using Xunit;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using Moq;
 
 namespace PostCodeSerialMonitor.Tests;
 public class TestDataGenerator : IEnumerable<object[]>
@@ -41,14 +42,17 @@ public class SerialDecoderTests
         
         // Create configuration
         var config = new AppConfiguration();
-        var options = Options.Create(config);
+        var optionsMonitor = new Mock<IOptionsMonitor<AppConfiguration>>();
+        optionsMonitor.Setup(m => m.CurrentValue).Returns(config);
 
         // Create logger factory
         var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+        var loggerMeta = new Mock<ILogger<MetaDefinitionService>>().Object;
+        var loggerDecoder = new Mock<ILogger<SerialLineDecoder>>().Object;
         
         // Create configuration service
         var configService = new ConfigurationService(
-            options,
+            optionsMonitor.Object,
             loggerFactory.CreateLogger<ConfigurationService>(),
             Path.GetDirectoryName(_testDataPath) ?? "."
         );
@@ -69,17 +73,17 @@ public class SerialDecoderTests
         );
 
         // Create MetaDefinitionService
-        var metaDefinitionService = new MetaDefinitionService(configService, metaUpdateService);
+        var metaDefinitionService = new MetaDefinitionService(configService, metaUpdateService, loggerMeta);
         metaDefinitionService.RefreshMetaDefinitionsAsync().GetAwaiter().GetResult();
 
-        _decoder = new SerialLineDecoder(metaDefinitionService);
+        _decoder = new SerialLineDecoder(metaDefinitionService, loggerDecoder);
     }
 
     [Theory]
     [ClassData(typeof(TestDataGenerator))]
     public void TestDecoding(string input, DecodedCode expected)
     {
-        var result = _decoder.DecodeLine(input, ConsoleType.XboxOne);
+        var result = _decoder.DecodeLine(input, ConsoleType.XboxOnePhat);
         Assert.NotNull(result);
         Assert.Equal(expected.Flavor, result.Flavor);
         Assert.Equal(expected.Index, result.Index);

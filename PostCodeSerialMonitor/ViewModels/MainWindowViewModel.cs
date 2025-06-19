@@ -28,6 +28,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private SerialLineDecoder _serialLineDecoder;
     private MetaUpdateService _metaUpdateService;
     private MetaDefinitionService _metaDefinitionService;
+    private GithubUpdateService _githubUpdateService;
     private IStorageProvider? _storageProvider;
 
     public ObservableCollection<string> SerialPorts { get; } = new();
@@ -87,6 +88,7 @@ public partial class MainWindowViewModel : ViewModelBase
         MetaUpdateService metaUpdateService,
         MetaDefinitionService metaDefinitionService,
         SerialLineDecoder serialLineDecoder,
+        GithubUpdateService githubUpdateService,
         ILogger<MainWindowViewModel> logger)
     {
         _serialService = serialService ?? throw new ArgumentNullException(nameof(serialService));
@@ -94,6 +96,7 @@ public partial class MainWindowViewModel : ViewModelBase
         _metaUpdateService = metaUpdateService ?? throw new ArgumentNullException(nameof(metaUpdateService));
         _metaDefinitionService = metaDefinitionService ?? throw new ArgumentNullException(nameof(metaDefinitionService));
         _serialLineDecoder = serialLineDecoder ?? throw new ArgumentNullException(nameof(serialLineDecoder));
+        _githubUpdateService = githubUpdateService ?? throw new ArgumentNullException(nameof(githubUpdateService));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         // Get version from assembly
@@ -173,6 +176,19 @@ public partial class MainWindowViewModel : ViewModelBase
                 .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.FailedLoadLocalMetadataMessageBoxError, ex.Message),
                     ButtonEnum.Ok)
                 .ShowAsync();
+        }
+
+        if (_configurationService.Config.CheckForAppUpdates)
+        {
+            updateAvailable = await _githubUpdateService.CheckForAppUpdatesAsync(AppVersion);
+            if (updateAvailable)
+            {
+                var box = MessageBoxManager
+                    .GetMessageBoxStandard(Assets.Resources.Warning,
+                    string.Format(Assets.Resources.NewAppReleaseAvailable, "https://github.com/xboxoneresearch/XboxPostcodeMonitor/releases"), ButtonEnum.Ok);
+
+                await box.ShowAsync();
+            }
         }
     }
 
@@ -267,9 +283,22 @@ public partial class MainWindowViewModel : ViewModelBase
             {
                 _logger.LogError(ex, Assets.Resources.ErrorConection);
                 await MessageBoxManager
-                    .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError,ex.Message),
+                    .GetMessageBoxStandard(Assets.Resources.Error, string.Format(Assets.Resources.ErrorConectionMessageBoxError, ex.Message),
                         ButtonEnum.Ok)
                     .ShowAsync();
+            }
+
+            if (IsConnected && _configurationService.Config.CheckForFwUpdates)
+            {
+                var updateAvailable = await _githubUpdateService.CheckForFirmwareUpdatesAsync(_serialService.FirmwareVersion);
+                if (updateAvailable)
+                {
+                    var box = MessageBoxManager
+                        .GetMessageBoxStandard(Assets.Resources.Warning,
+                        string.Format(Assets.Resources.NewFirmwareReleaseAvailable, "https://github.com/xboxoneresearch/PicoDurangoPOST/releases"), ButtonEnum.Ok);
+
+                    await box.ShowAsync();
+                }
             }
         }
     }
