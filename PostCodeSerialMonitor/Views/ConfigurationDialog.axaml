@@ -23,10 +23,7 @@
 
                 <CheckBox Content="{x:Static assets:Resources.CheckApplicationUpdates}" 
                           IsChecked="{Binding CheckForAppUpdates}"/>
-                <TextBox Text="{Binding AppUpdateUrl}" 
-                         Watermark="{x:Static assets:Resources.ApplicationUpdateUrl}"
-                         IsEnabled="{Binding CheckForAppUpdates}"/>
-                
+
                 <CheckBox Content="{x:Static assets:Resources.CheckCodeUpdates}" 
                           IsChecked="{Binding CheckForCodeUpdates}"
                           Margin="0,10,0,0"/>
@@ -37,9 +34,6 @@
                 <CheckBox Content="{x:Static assets:Resources.CheckFirmwareUpdates}" 
                           IsChecked="{Binding CheckForFwUpdates}"
                           Margin="0,10,0,0"/>
-                <TextBox Text="{Binding FwUpdateUrl}" 
-                         Watermark="{x:Static assets:Resources.FirmwareUpdateUrl}"
-                         IsEnabled="{Binding CheckForFwUpdates}"/>
             </StackPanel>
         </ScrollViewer>
 
