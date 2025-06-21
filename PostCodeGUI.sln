@@ -5,8 +5,6 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostCodeSerialMonitor", "PostCodeSerialMonitor\PostCodeSerialMonitor.csproj", "{EBB8E46D-05A6-46CF-9C53-7DF64086F492}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CambaBR", "CambaBR\CambaBR.csproj", "{EA7179F2-E64F-4637-A767-4D4B0E8B4234}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
