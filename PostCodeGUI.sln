@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostCodeSerialMonitor", "PostCodeSerialMonitor\PostCodeSerialMonitor.csproj", "{EBB8E46D-05A6-46CF-9C53-7DF64086F492}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostCodeSerialMonitor.Tests", "PostCodeSerialMonitor.Tests\PostCodeSerialMonitor.Tests.csproj", "{D629C06E-3323-47AF-83C1-B7A21D978ED2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,7 @@ Global
 		{EBB8E46D-05A6-46CF-9C53-7DF64086F492}.Release|x64.Build.0 = Release|Any CPU
 		{EBB8E46D-05A6-46CF-9C53-7DF64086F492}.Release|x86.ActiveCfg = Release|Any CPU
 		{EBB8E46D-05A6-46CF-9C53-7DF64086F492}.Release|x86.Build.0 = Release|Any CPU
+<<<<<<< HEAD
 		{EA7179F2-E64F-4637-A767-4D4B0E8B4234}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EA7179F2-E64F-4637-A767-4D4B0E8B4234}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA7179F2-E64F-4637-A767-4D4B0E8B4234}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -39,6 +42,20 @@ Global
 		{EA7179F2-E64F-4637-A767-4D4B0E8B4234}.Release|x64.Build.0 = Release|Any CPU
 		{EA7179F2-E64F-4637-A767-4D4B0E8B4234}.Release|x86.ActiveCfg = Release|Any CPU
 		{EA7179F2-E64F-4637-A767-4D4B0E8B4234}.Release|x86.Build.0 = Release|Any CPU
+=======
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Debug|x64.Build.0 = Debug|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Debug|x86.Build.0 = Debug|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Release|x64.ActiveCfg = Release|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Release|x64.Build.0 = Release|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Release|x86.ActiveCfg = Release|Any CPU
+		{D629C06E-3323-47AF-83C1-B7A21D978ED2}.Release|x86.Build.0 = Release|Any CPU
+>>>>>>> 79de7545bc5ae6e23e1f9e278d3775a9fcd55d11
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

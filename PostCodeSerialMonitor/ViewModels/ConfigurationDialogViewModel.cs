@@ -29,13 +29,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
     private bool checkForFwUpdates;
 
     [ObservableProperty]
-    private string appUpdateUrl;
-
-    [ObservableProperty]
     private string codesMetaBaseUrl;
-
-    [ObservableProperty]
-    private string fwUpdateUrl;
 
     [ObservableProperty]
     private ObservableCollection<string> languages;
@@ -61,9 +55,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
         CheckForAppUpdates = _originalConfiguration.CheckForAppUpdates;
         CheckForCodeUpdates = _originalConfiguration.CheckForCodeUpdates;
         CheckForFwUpdates = _originalConfiguration.CheckForFwUpdates;
-        AppUpdateUrl = _originalConfiguration.AppUpdateUrl.ToString();
         CodesMetaBaseUrl = _originalConfiguration.CodesMetaBaseUrl.ToString();
-        FwUpdateUrl = _originalConfiguration.FwUpdateUrl.ToString();
         SelectedLanguage = _originalConfiguration.Language;
 
         //Add available languages
@@ -80,9 +72,7 @@ public partial class ConfigurationDialogViewModel : ViewModelBase
             config.CheckForAppUpdates = CheckForAppUpdates;
             config.CheckForCodeUpdates = CheckForCodeUpdates;
             config.CheckForFwUpdates = CheckForFwUpdates;
-            config.AppUpdateUrl = new Uri(AppUpdateUrl);
             config.CodesMetaBaseUrl = new Uri(CodesMetaBaseUrl);
-            config.FwUpdateUrl = new Uri(FwUpdateUrl);
             config.Language = SelectedLanguage;
         });
 

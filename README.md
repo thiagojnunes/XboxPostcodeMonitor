@@ -46,6 +46,5 @@ dotnet run
 
 ## ToDO
 
-- I2C Scanning (only if we can get it stable!)
-- Notify user about new available app version
-- Notify user about new available Pico firmware
+~~I2C Scanning (only if we can get it stable!)~~
+- ...

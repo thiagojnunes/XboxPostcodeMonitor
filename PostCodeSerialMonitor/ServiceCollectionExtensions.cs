@@ -12,7 +12,7 @@ namespace PostCodeSerialMonitor;
 
 public static class ServiceCollectionExtensions
 {
-    const int SUPPORTED_CONFIG_FORMAT_VERSION = 1;
+    const int SUPPORTED_CONFIG_FORMAT_VERSION = 2;
     public static void AddCommonServices(this IServiceCollection collection)
     {
         // Configure logging
@@ -58,6 +58,7 @@ public static class ServiceCollectionExtensions
         collection.AddSingleton<MetaUpdateService>();
         collection.AddSingleton<MetaDefinitionService>();
         collection.AddSingleton<SerialLineDecoder>();
+        collection.AddSingleton<GithubUpdateService>();
 
         // Register ViewModels
         collection.AddTransient<MainWindowViewModel>();

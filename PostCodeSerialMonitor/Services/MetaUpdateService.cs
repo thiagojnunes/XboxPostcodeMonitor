@@ -1,13 +1,16 @@
 using System;
 using System.IO;
 using System.Net.Http;
+using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using PostCodeSerialMonitor.Models;
+using PostCodeSerialMonitor.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace PostCodeSerialMonitor.Services;
+
 public class MetaUpdateService
 {
     private readonly ConfigurationService _configurationService;
@@ -24,8 +27,8 @@ public class MetaUpdateService
     public AppConfiguration Config => _configurationService.Config;
 
     public MetaUpdateService(
-        ConfigurationService configurationService, 
-        JsonSerializerOptions jsonOptions, 
+        ConfigurationService configurationService,
+        JsonSerializerOptions jsonOptions,
         ILogger<MetaUpdateService> logger)
     {
         _configurationService = configurationService ?? throw new ArgumentNullException(nameof(configurationService));
@@ -50,7 +53,7 @@ public class MetaUpdateService
     {
         var localMeta = await GetLocalMetaDefinitionAsync();
         var remoteMeta = await GetRemoteMetaDefinitionAsync();
-        
+
         if (localMeta == null || remoteMeta == null)
         {
             // Update required
@@ -75,7 +78,7 @@ public class MetaUpdateService
 
         // Ensure directory exists
         Directory.CreateDirectory(_localPath);
-        
+
         // Save the new meta definition
         await File.WriteAllTextAsync(LocalMetaPath, metaContentStr);
 
@@ -143,7 +146,7 @@ public class MetaUpdateService
         {
             var response = await _httpClient.GetAsync(Config.MetaJsonUrl);
             response.EnsureSuccessStatusCode();
-            
+
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<MetaDefinition>(json, _jsonSerializeOptions);
         }
